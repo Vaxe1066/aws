@@ -11,7 +11,7 @@ import os
 #wordString = 'ball, cup, football, beautiful'
 #print(m.getDataFromUrl(url, wordString))
 
-def lambda_handler(event):
+def lambda_handler(event, context):
     
     #get url string here, load json body first then extract url string
     body = json.loads(event["body"])
