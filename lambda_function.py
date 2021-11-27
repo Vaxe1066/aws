@@ -11,13 +11,13 @@ import os
 #wordString = 'ball, cup, football, beautiful'
 #print(m.getDataFromUrl(url, wordString))
 
-def lambda_handler(event, context):
+def lambda_handler(event):
     
     #get url string here, load json body first then extract url string
     body = json.loads(event["body"])
     url = body["url"]
 
-    if(m.validUrl(url)==True):
+    if(m.validUrl(url)==True and 'en.wikipedia.org/wiki/' in url):
         #get word string here
         wordString = body["wordString"]
 
@@ -30,6 +30,7 @@ def lambda_handler(event, context):
 
         newVals = m.getDataFromUrl(url, wordString)
 
+        #update item - using this as it'll create new item if the item doesnt exist
         table.update_item(
             Key={
                 'urlString': url
@@ -41,7 +42,9 @@ def lambda_handler(event, context):
             )
 
         resBody = json.dumps({"output": newVals})
-        
+        #ideally would have a error handling of the update function
+
+        #successful 'update' send 200 response 
         response = {
             "statusCode": 200,
             "headers": {
